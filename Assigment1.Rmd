@@ -1,0 +1,41 @@
+#Statistical Inference Assigment1
+
+##Show the sample mean and compare it to the theoretical mean of the distribution.
+```{r}
+Lambda = 0.2
+n = 40
+nsms = 1:1000
+set.seed(1)
+#the 1000 sample in the dataframe are as follow
+means <- data.frame(x = sapply(nsms, function(x) {mean(rexp(n, Lambda))}))
+str(means)
+```
+
+```{r}
+#the sample mean of the distribution as follows:
+mean(means$x)
+```
+
+the theoretical mean of the distribution is 1/0.2=5.0, which is very close to the sample mean of the distribution of 4.990025
+
+##Show how variable the sample is (via variance) and compare it to the theoretical variance of the distribution.
+
+Acoording to the CLT we could expect that the variance of the sample of the 1000 means is approximately (1/0.2*0.2)/40=0.625
+```{r}
+var(means$x)
+```
+the vriance of the sample is 0.6111165 which is close to the theoretical variance of the distribution of 0.625
+
+##Show that the distribution is approximately normal
+in order to demonstrate that the sample distribute of the 1000 sampled means is approximately normal we will plot the correspondent histogram and overlay it with density function frorm the theoretical sampling distribution which is N(1/0.2,(1/0.2)/sqrt(40)) distributed.
+```{r}
+library(ggplot2)
+ggplot(data = means, aes(x = x)) + 
+  geom_histogram(binwidth = 0.4, color = 'black', fill = 'blue', aes(y = ..density..)) +
+  stat_function(aes(x = c(2, 8)), fun = dnorm, color = 'red', 
+                args = list(mean = 5, sd = sqrt(0.625))) +
+  xlab('Sample mean') +
+  ylab('Density') +
+  ggtitle('Comparison of the sample distribution\n and the theoretical distribution')
+```
+
